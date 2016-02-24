@@ -1,6 +1,5 @@
-#coding="utf-8"
 import psycopg2
-
+#import psycopg2.extras
 
 class DatabaseError(Exception):
     pass
@@ -8,7 +7,7 @@ class NotFoundError(Exception):
     pass
 
 class Entity(object):
-    db = None
+    db = psycopg2.connect(database="orm", user="inster", password="dev17new")
 
     # ORM part 1
     __delete_query    = 'DELETE FROM "{table}" WHERE {table}_id=%s'
@@ -17,10 +16,10 @@ class Entity(object):
     __select_query    = 'SELECT * FROM "{table}" WHERE {table}_id=%s'
     __update_query    = 'UPDATE "{table}" SET {columns} WHERE {table}_id=%s'
 
-    # ORM part 2
-    __parent_query    = 'SELECT * FROM "{table}" WHERE {parent}_id=%s'
-    __sibling_query   = 'SELECT * FROM "{sibling}" NATURAL JOIN "{join_table}" WHERE {table}_id=%s'
-    __update_children = 'UPDATE "{table}" SET {parent}_id=%s WHERE {table}_id IN ({children})'
+    # # ORM part 2
+    # __parent_query    = 'SELECT * FROM "{table}" WHERE {parent}_id=%s'
+    # __sibling_query   = 'SELECT * FROM "{sibling}" NATURAL JOIN "{join_table}" WHERE {table}_id=%s'
+    # __update_children = 'UPDATE "{table}" SET {parent}_id=%s WHERE {table}_id IN ({children})'
 
     def __init__(self, id=None):
         if self.__class__.db is None:
@@ -47,13 +46,11 @@ class Entity(object):
         except KeyError:
             raise AttributeError(name)
 
+
     def __setattr__(self, name, value):
         # check, if requested property name is in current class
         #    columns, parents, children or siblings and call corresponding
         #    setter with name and value as arguments or use default implementation
-        try:
-            object.__setattr__(self, name, value)
-        except AttributeError:
             if self.__fields:
                 self.__fields[name] = value
             else:
@@ -70,7 +67,7 @@ class Entity(object):
         pass
 
     def __load(self):
-        # if current instance is not loaded yet — execute select statement and store it's result as an associative array (fields), where column names used as keys
+        # if current instance is not loaded yet - execute select statement and store it's result as an associative array (fields), where column names used as keys
         pass
 
     def __update(self):
@@ -87,28 +84,28 @@ class Entity(object):
         # return value from fields array by <table>_<name> as a key
         pass
 
-    def _get_parent(self, name):
-        # ORM part 2
-        # get parent id from fields with <name>_id as a key
-        # return an instance of parent entity class with an appropriate id
-        pass
+    # def _get_parent(self, name):
+    #     # ORM part 2
+    #     # get parent id from fields with <name>_id as a key
+    #     # return an instance of parent entity class with an appropriate id
+    #     pass
 
-    def _get_siblings(self, name):
-        # ORM part 2
-        # get parent id from fields with <name>_id as a key
-        # return an array of sibling entity instances
-        # each sibling instance must have an id and be filled with data
-        pass
+    # def _get_siblings(self, name):
+    #     # ORM part 2
+    #     # get parent id from fields with <name>_id as a key
+    #     # return an array of sibling entity instances
+    #     # each sibling instance must have an id and be filled with data
+    #     pass
 
     def _set_column(self, name, value):
         # put new value into fields array with <table>_<name> as a key
         pass
 
-    def _set_parent(self, name, value):
-        # ORM part 2
-        # put new value into fields array with <name>_id as a key
-        # value can be a number or an instance of Entity subclass
-        pass
+    # def _set_parent(self, name, value):
+    #     # ORM part 2
+    #     # put new value into fields array with <name>_id as a key
+    #     # value can be a number or an instance of Entity subclass
+    #     pass
 
     @classmethod
     def all(cls):
@@ -125,7 +122,7 @@ class Entity(object):
     @property
     def id(self):
         # try to guess yourself
-        pass
+        return self.__id
 
     @property
     def created(self):

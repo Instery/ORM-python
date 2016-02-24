@@ -39,7 +39,7 @@ class User(Entity):
 
 if __name__ == "__main__":
     section = Section()
-    section.title = "zalupa"
+    section.title = "zoidberg"
     section.save()
 
     for section in Section.all():
