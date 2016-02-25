@@ -1,13 +1,14 @@
 import psycopg2
-#import psycopg2.extras
+import psycopg2.extras
 
 class DatabaseError(Exception):
     pass
 class NotFoundError(Exception):
     pass
 
+
 class Entity(object):
-    db = psycopg2.connect(database="orm", user="inster", password="dev17new")
+    db = psycopg2.connect(database="orm", user="inster")
 
     # ORM part 1
     __delete_query    = 'DELETE FROM "{table}" WHERE {table}_id=%s'
@@ -41,20 +42,23 @@ class Entity(object):
         #    columns, parents, children or siblings and call corresponding
         #    getter with name as an argument
         # throw an exception, if attribute is unrecognized
-        try:
-            return self.__fields[name]
-        except KeyError:
-            raise AttributeError(name)
+        pass
+        # try:
+        #     return self.__dict__[name]
+        # except KeyError:
+        #     raise NotFoundError
 
 
     def __setattr__(self, name, value):
         # check, if requested property name is in current class
         #    columns, parents, children or siblings and call corresponding
         #    setter with name and value as arguments or use default implementation
-            if self.__fields:
-                self.__fields[name] = value
-            else:
-                self.__fields = {name: value}
+        # pass
+            # if self.__fields:
+            #     self.__fields[name] = value
+            # else:
+            #     self.__fields = {name: value}
+        self.__dict__[name] = value
 
     def __execute_query(self, query, args):
         # execute an sql statement and handle exceptions together with transactions

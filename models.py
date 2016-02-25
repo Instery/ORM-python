@@ -40,7 +40,8 @@ class User(Entity):
 if __name__ == "__main__":
     section = Section()
     section.title = "zoidberg"
-    section.save()
+    # print section.title
+    # section.save()
 
-    for section in Section.all():
-        print section.title
+    # for section in Section.all():
+    #     print section.title
