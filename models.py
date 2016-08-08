@@ -38,10 +38,10 @@ class User(Entity):
 
 
 if __name__ == "__main__":
+    Entity.db = psycopg2.connect(database='orm')
     section = Section()
-    section.title = "zoidberg"
-    # print section.title
-    # section.save()
+    section.title = "zalupa"
+    section.save()
 
-    # for section in Section.all():
-    #     print section.title
+    for section in Section.all():
+        print section.title
